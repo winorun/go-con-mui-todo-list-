@@ -7,8 +7,6 @@ import (
   "strings"
 )
 
-//~ import "golang.org/x/crypto/ssh/terminal"
-
 type taskStruct struct {
     check  bool
     task   string
@@ -20,9 +18,6 @@ type windowsStruct struct {
     x      uint
     y      uint
 }
-
-//~ import "github.com/gbin/goncurses"
-//~ import "log"
 
 func drawTaskList(taskList []taskStruct,window windowsStruct){
     col := int(window.x)
@@ -83,18 +78,7 @@ func getSignalMain() string {
 }
 
 func main() {
-    //~ fmt.Println(getTerminalSize());
-    //~ showTitle(80,"Привет, Мир");
-    //~ showHeader1(80,"Заголовок первого уровня");
-    //~ showHeader2(80,"Заголовок второго уровня");
-    //~ showToDoItem(true,"True item");
-    //~ showToDoItem(false,"False item");
-    //~ fmt.Printf("\n");showItalicText("Italic");fmt.Printf("\n");
-    //~ fmt.Printf("\n");showBoldText("BoldText");fmt.Printf("\n");
-    
-    //~ var name string
-    //~ var age int
-    
+
     oldState, err := makeRaw(0)
     if err != nil {
             panic(err)
@@ -128,39 +112,4 @@ L:  for {
 
     fmt.Printf("\u001B[%d;%dH",height,1)
     fmt.Print("\u001B[?1002l");
-    
-    //~ fmt.Print("\u001B[0F\u001B[2KВведите пол:")
-    //~ fmt.Print("\u001B[0F\u001B[2KВведите возраст:")
-    
-    //~ src, err := goncurses.Init()
-    //~ _, err := goncurses.Init()
-    //~ if err != nil {
-        //~ log.Fatal("init:", err)
-    //~ }
-    //~ defer goncurses.End()
-
-    //~ goncurses.Echo(false);
-    //~ goncurses.CBreak(true);
-    //~ goncurses.MouseMask(goncurses.M_ALL,nil);
-
-    //~ src.Keypad(true);
-
-    //~ //fmt.Printf("\u001Bc %X flag - %d x - %d y - %d \n",name[0:3], name[4], name[5]-32,name[6]-32);
-  //~ L:
-    //~ for ;;{
-        //~ fmt.Print("\u001B[0F\u001B[2KВведите возраст:")
-        //~ switch char := src.GetChar(); char{
-            //~ case goncurses.KEY_TAB:
-                //~ break L
-            //~ case goncurses.KEY_RETURN:
-                //~ break L
-            //~ case goncurses.KEY_MOUSE:
-                //~ mouse:=goncurses.GetMouse()
-                //~ src.Printf("X - %d Y- %d st -%d \n",mouse.X,mouse.Y,mouse.State)
-            //~ default:
-                //~ src.Printf("%X ",char)
-                //~ src.Printf("%X ",goncurses.KEY_MOUSE)
-            //~ }
-    //~ }
-    
 }

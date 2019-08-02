@@ -17,11 +17,6 @@ func showHeader1(w int, header string){
     fmt.Printf("%s\n\n",setcolor(strings.ToUpper(center(header,w)),"BLUE"))
 }
 
-//~ func drawTaskItem(status bool,task string){
-    //~ var str string
-
-//~ }
-
 func showItalicText(text string){
     RESET := "\u001B[0m";
     fmt.Printf("\u001B[3m%s%s\n",text,RESET)
