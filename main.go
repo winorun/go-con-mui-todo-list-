@@ -5,11 +5,36 @@ import (
   "fmt"
   "os"
   "strings"
+  "encoding/json"
+  "log"
 )
 
+
+
+var defaultTaskList []byte = []byte(
+`{
+  "header": "default",
+  "tasks": [
+    {
+      "task": "Пример",
+      "status": false
+    },
+    {
+      "task": "Пример2",
+      "status": true
+    }
+  ]
+}`)
+
+
 type taskStruct struct {
-    check  bool
-    task   string
+    Check  bool `json:"status"`
+    Task   string `json:"task"`
+}
+
+type notepud struct{
+    Header string `json:"header"`
+    Task []taskStruct `json:"tasks"`
 }
 
 type windowsStruct struct {
@@ -17,6 +42,14 @@ type windowsStruct struct {
     height uint
     x      uint
     y      uint
+}
+
+func loadDefaultTaskList() notepud {
+    var a notepud
+    if err:=json.Unmarshal(defaultTaskList, &a);err!=nil{
+        log.Fatalf("Ошибка файла данных: %s",err);
+    }
+    return a
 }
 
 func drawTaskList(taskList []taskStruct,window windowsStruct){
@@ -29,12 +62,12 @@ func drawTaskList(taskList []taskStruct,window windowsStruct){
         fmt.Print(strings.Repeat(" ",w))
         fmt.Printf("\u001B[%d;%dH",row,col)
         var checkStr string
-        if task.check {
+        if task.Check {
             checkStr = "☑"
         }else{
             checkStr = "☐"
         }
-        fmt.Printf("  %s  %s",checkStr,task.task)
+        fmt.Printf("  %s  %s",checkStr,task.Task)
     }
 }
 
@@ -85,26 +118,26 @@ func main() {
     }
     defer restore(0, oldState)
     
-    task := &taskStruct{}
-    
     width, height := getTerminalSize()
     //~ WindowsHeader,WindowsTask := drawWindows(width,height)
     _,windowTask := drawWindows(width,height)
-    drawWindows(width,height)
     
-    var taskList []taskStruct
+    nodepudList := loadDefaultTaskList();
+    taskList:= nodepudList.Task
+    drawTaskList(taskList,windowTask)
     
     fmt.Print("\u001B[?1002h");
 
 L:  for {
+        task := &taskStruct{}
         fmt.Printf("\u001B[%d;2H\u001B[0KВведите имя задачи: ",height-1)
         //~ buf, _ := reader.ReadString('\n')
         switch signal:= getSignal(); signal{
             case "exit": break L
             case "none": break
             default:
-                task.check = false
-                task.task = signal
+                task.Check = false
+                task.Task = signal
                 taskList = append(taskList,*task);
                 drawTaskList(taskList,windowTask);
         }
